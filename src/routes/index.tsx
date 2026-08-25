@@ -1,5 +1,9 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Volume2, VolumeX } from "lucide-react";
+
+import { isMuted, playSfx, setMuted, startAmbient } from "@/lib/sound";
+
 
 import island from "@/assets/bay.webp.asset.json";
 import house from "@/assets/house.png.asset.json";
