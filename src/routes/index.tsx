@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
-import island from "@/assets/island.jpg.asset.json";
+import island from "@/assets/bay.webp.asset.json";
 import house from "@/assets/house.png.asset.json";
 import stats from "@/assets/stats.png.asset.json";
 import chest from "@/assets/chest.png.asset.json";
@@ -66,11 +66,7 @@ function Index() {
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Sea: layered waves for depth */}
-      <div className="pointer-events-none absolute inset-0 wave wave-far" />
-      <div className="pointer-events-none absolute inset-0 wave wave-mid" />
-      <div className="pointer-events-none absolute inset-0 wave wave-near" />
-      <div className="pointer-events-none absolute inset-0 sea-shimmer" />
+      {/* Soft breathing water glow (no visible lines) */}
       <div className="pointer-events-none absolute inset-0 sea-glow" />
 
       {/* Sun rays */}
