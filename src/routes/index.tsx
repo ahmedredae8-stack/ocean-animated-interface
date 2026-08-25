@@ -156,6 +156,16 @@ function Index() {
         ))}
       </div>
 
+      {/* Sound toggle */}
+      <button
+        type="button"
+        onClick={toggleSound}
+        aria-label={sound ? "كتم الصوت" : "تشغيل الصوت"}
+        className="absolute right-3 top-3 z-10 rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
+      >
+        {sound ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+      </button>
+
       {/* Bottom toolbar */}
       <nav className="absolute inset-x-0 bottom-0 dock px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
         <ul className="mx-auto flex max-w-3xl items-end justify-between gap-1 sm:gap-2">
@@ -166,6 +176,8 @@ function Index() {
                 aria-label={a.label}
                 className="dock-btn"
                 style={{ animationDelay: `${i * 0.25}s` }}
+                onPointerEnter={() => playSfx("hover", 0.35)}
+                onClick={() => playSfx("click", 0.75)}
               >
                 <img src={a.src} alt="" className="h-full w-full object-contain" />
               </button>
@@ -173,6 +185,7 @@ function Index() {
           ))}
         </ul>
       </nav>
+
     </main>
   );
 }
