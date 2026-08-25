@@ -1,5 +1,9 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Volume2, VolumeX } from "lucide-react";
+
+import { isMuted, playSfx, setMuted, startAmbient } from "@/lib/sound";
+
 
 import island from "@/assets/bay.webp.asset.json";
 import house from "@/assets/house.png.asset.json";
@@ -44,6 +48,25 @@ const actions = [
 
 function Index() {
   const skyRef = useRef<HTMLDivElement>(null);
+  const [sound, setSound] = useState(true);
+
+  useEffect(() => {
+    const unlock = () => startAmbient();
+    window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
+    startAmbient();
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
+  const toggleSound = () => {
+    const next = !isMuted() ? false : true;
+    setMuted(!next);
+    setSound(next);
+    if (next) startAmbient();
+  };
 
   const handlePointer = (e: React.PointerEvent<HTMLElement>) => {
     const el = skyRef.current;
@@ -53,6 +76,7 @@ function Index() {
     el.style.setProperty("--px", String(x));
     el.style.setProperty("--py", String(y));
   };
+
 
   return (
     <main
@@ -132,6 +156,16 @@ function Index() {
         ))}
       </div>
 
+      {/* Sound toggle */}
+      <button
+        type="button"
+        onClick={toggleSound}
+        aria-label={sound ? "كتم الصوت" : "تشغيل الصوت"}
+        className="absolute right-3 top-3 z-10 rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
+      >
+        {sound ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+      </button>
+
       {/* Bottom toolbar */}
       <nav className="absolute inset-x-0 bottom-0 dock px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
         <ul className="mx-auto flex max-w-3xl items-end justify-between gap-1 sm:gap-2">
@@ -142,6 +176,8 @@ function Index() {
                 aria-label={a.label}
                 className="dock-btn"
                 style={{ animationDelay: `${i * 0.25}s` }}
+                onPointerEnter={() => playSfx("hover", 0.35)}
+                onClick={() => playSfx("click", 0.75)}
               >
                 <img src={a.src} alt="" className="h-full w-full object-contain" />
               </button>
@@ -149,6 +185,7 @@ function Index() {
           ))}
         </ul>
       </nav>
+
     </main>
   );
 }
