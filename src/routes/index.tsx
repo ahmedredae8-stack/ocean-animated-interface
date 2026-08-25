@@ -48,6 +48,25 @@ const actions = [
 
 function Index() {
   const skyRef = useRef<HTMLDivElement>(null);
+  const [sound, setSound] = useState(true);
+
+  useEffect(() => {
+    const unlock = () => startAmbient();
+    window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
+    startAmbient();
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
+  const toggleSound = () => {
+    const next = !isMuted() ? false : true;
+    setMuted(!next);
+    setSound(next);
+    if (next) startAmbient();
+  };
 
   const handlePointer = (e: React.PointerEvent<HTMLElement>) => {
     const el = skyRef.current;
@@ -57,6 +76,7 @@ function Index() {
     el.style.setProperty("--px", String(x));
     el.style.setProperty("--py", String(y));
   };
+
 
   return (
     <main
