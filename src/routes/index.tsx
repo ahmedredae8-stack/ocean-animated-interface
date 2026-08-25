@@ -50,8 +50,12 @@ const actions = [
 function Index() {
   const skyRef = useRef<HTMLDivElement>(null);
   const [sound, setSound] = useState(true);
+  const [intro, setIntro] = useState(true);
+
+  const finishIntro = useCallback(() => setIntro(false), []);
 
   useEffect(() => {
+    if (intro) return;
     const unlock = () => startAmbient();
     window.addEventListener("pointerdown", unlock, { once: true });
     window.addEventListener("keydown", unlock, { once: true });
@@ -60,7 +64,10 @@ function Index() {
       window.removeEventListener("pointerdown", unlock);
       window.removeEventListener("keydown", unlock);
     };
-  }, []);
+  }, [intro]);
+
+  // Silence everything the moment the page is left or unmounted.
+  useEffect(() => stopAllSounds, []);
 
   const toggleSound = () => {
     const next = !isMuted() ? false : true;
