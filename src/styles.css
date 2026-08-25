@@ -403,8 +403,7 @@
 }
 
 .cloud:hover {
-  filter: blur(4px) brightness(1.25)
-    drop-shadow(0 0 24px oklch(1 0 0 / 0.75));
+  filter: blur(5px) brightness(1.18);
   opacity: 1;
 }
 
@@ -465,5 +464,41 @@
   }
   .cloud-field {
     transform: none;
+  }
+}
+
+
+/* ── Living water: warped artwork, not overlays ──────────── */
+.water-layer {
+  pointer-events: none;
+  filter: url(#waterWarp);
+  -webkit-mask-image: radial-gradient(
+    46% 26% at 62% 58%,
+    #000 55%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(46% 26% at 62% 58%, #000 55%, transparent 100%);
+  animation: water-sway 11s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes water-sway {
+  0%,
+  100% {
+    transform: scale(1.008) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: scale(1.014) translate3d(-4px, 2px, 0);
+  }
+}
+
+.cloud:active {
+  filter: blur(5px) brightness(1.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .water-layer {
+    animation: none;
+    filter: none;
   }
 }
