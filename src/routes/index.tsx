@@ -66,7 +66,42 @@ function Index() {
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Soft breathing water glow (no visible lines) */}
+      {/* Real water motion: the sea area of the artwork is warped by an
+          animated turbulence displacement filter (no overlays on top) */}
+      <img
+        src={island.url}
+        alt=""
+        aria-hidden="true"
+        className="water-layer absolute inset-0 h-full w-full object-cover"
+      />
+
+      <svg className="absolute h-0 w-0" aria-hidden="true" focusable="false">
+        <filter id="waterWarp" x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.006 0.02"
+            numOctaves={2}
+            seed={7}
+            result="noise"
+          >
+            <animate
+              attributeName="baseFrequency"
+              dur="14s"
+              values="0.006 0.02; 0.010 0.028; 0.006 0.02"
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="14"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </svg>
+
+      {/* Soft breathing water glow */}
       <div className="pointer-events-none absolute inset-0 sea-glow" />
 
       {/* Sun rays */}
