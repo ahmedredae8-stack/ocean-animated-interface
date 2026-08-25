@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 
 import island from "@/assets/island.jpg.asset.json";
@@ -42,8 +43,22 @@ const actions = [
 ];
 
 function Index() {
+  const skyRef = useRef<HTMLDivElement>(null);
+
+  const handlePointer = (e: React.PointerEvent<HTMLElement>) => {
+    const el = skyRef.current;
+    if (!el) return;
+    const x = e.clientX / window.innerWidth - 0.5;
+    const y = e.clientY / window.innerHeight - 0.5;
+    el.style.setProperty("--px", String(x));
+    el.style.setProperty("--py", String(y));
+  };
+
   return (
-    <main className="relative h-screen w-full overflow-hidden bg-sky">
+    <main
+      className="relative h-screen w-full overflow-hidden bg-sky"
+      onPointerMove={handlePointer}
+    >
       {/* Island scene */}
       <img
         src={island.url}
@@ -51,7 +66,10 @@ function Index() {
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Sea shimmer + waves */}
+      {/* Sea: layered waves for depth */}
+      <div className="pointer-events-none absolute inset-0 wave wave-far" />
+      <div className="pointer-events-none absolute inset-0 wave wave-mid" />
+      <div className="pointer-events-none absolute inset-0 wave wave-near" />
       <div className="pointer-events-none absolute inset-0 sea-shimmer" />
       <div className="pointer-events-none absolute inset-0 sea-glow" />
 
@@ -59,7 +77,7 @@ function Index() {
       <div className="pointer-events-none absolute inset-0 sun-rays" />
 
       {/* Drifting clouds */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2">
+      <div ref={skyRef} className="cloud-field absolute inset-x-0 top-0 h-1/2">
         <span className="cloud cloud-a" />
         <span className="cloud cloud-b" />
         <span className="cloud cloud-c" />
