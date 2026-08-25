@@ -142,3 +142,247 @@
     color: var(--color-foreground);
   }
 }
+
+/* ── Island scene design system ───────────────────────────── */
+
+:root {
+  --sky: oklch(0.78 0.12 235);
+  --sea-light: oklch(0.85 0.09 215);
+  --gold: oklch(0.83 0.14 85);
+  --gold-deep: oklch(0.62 0.13 70);
+  --dock-bg: oklch(0.28 0.05 250 / 0.55);
+}
+
+@theme inline {
+  --color-sky: var(--sky);
+}
+
+/* Sea shimmer */
+.sea-shimmer {
+  background:
+    repeating-linear-gradient(
+      100deg,
+      color-mix(in oklab, var(--sea-light) 55%, transparent) 0px,
+      transparent 3px,
+      transparent 26px
+    );
+  mask-image: radial-gradient(120% 60% at 62% 72%, #000 25%, transparent 72%);
+  opacity: 0.35;
+  animation: sea-drift 9s linear infinite;
+  mix-blend-mode: screen;
+}
+
+.sea-glow {
+  background: radial-gradient(
+    50% 30% at 60% 68%,
+    color-mix(in oklab, var(--sea-light) 60%, transparent),
+    transparent 70%
+  );
+  opacity: 0.35;
+  animation: sea-breathe 7s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+@keyframes sea-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 260px 40px;
+  }
+}
+
+@keyframes sea-breathe {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.04);
+  }
+}
+
+/* Sun rays */
+.sun-rays {
+  background: conic-gradient(
+    from 200deg at 85% -10%,
+    transparent 0deg,
+    color-mix(in oklab, var(--gold) 35%, transparent) 12deg,
+    transparent 24deg,
+    transparent 40deg,
+    color-mix(in oklab, var(--gold) 25%, transparent) 52deg,
+    transparent 66deg
+  );
+  opacity: 0.25;
+  mix-blend-mode: screen;
+  animation: rays 14s ease-in-out infinite alternate;
+}
+
+@keyframes rays {
+  from {
+    opacity: 0.14;
+    transform: rotate(-2deg);
+  }
+  to {
+    opacity: 0.32;
+    transform: rotate(2deg);
+  }
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(
+    ellipse at 50% 60%,
+    oklch(1 0 0 / 0.95),
+    oklch(1 0 0 / 0.6) 55%,
+    transparent 72%
+  );
+  filter: blur(6px);
+  will-change: transform;
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  background: inherit;
+}
+
+.cloud::before {
+  width: 55%;
+  height: 130%;
+  left: 12%;
+  top: -55%;
+}
+
+.cloud::after {
+  width: 42%;
+  height: 110%;
+  right: 10%;
+  top: -38%;
+}
+
+.cloud-a {
+  width: 46%;
+  height: 7%;
+  top: 12%;
+  left: -50%;
+  animation: drift 48s linear infinite;
+}
+
+.cloud-b {
+  width: 34%;
+  height: 5.5%;
+  top: 26%;
+  left: -40%;
+  opacity: 0.8;
+  animation: drift 66s linear infinite;
+  animation-delay: -20s;
+}
+
+.cloud-c {
+  width: 60%;
+  height: 8%;
+  top: 3%;
+  left: -65%;
+  opacity: 0.65;
+  animation: drift 84s linear infinite;
+  animation-delay: -45s;
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(190vw);
+  }
+}
+
+/* Water sparkles */
+.sparkle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: radial-gradient(circle, oklch(1 0 0 / 0.95), transparent 70%);
+  animation: twinkle 3.4s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+
+/* Bottom dock */
+.dock {
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--dock-bg) 100%, transparent),
+    color-mix(in oklab, var(--dock-bg) 60%, transparent) 60%,
+    transparent
+  );
+  backdrop-filter: blur(8px);
+  border-top: 1px solid color-mix(in oklab, var(--gold) 45%, transparent);
+}
+
+.dock-btn {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 74px;
+  margin-inline: auto;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 10px oklch(0.2 0.05 250 / 0.45));
+  transition:
+    transform 180ms ease,
+    filter 180ms ease;
+  animation: bob 4.5s ease-in-out infinite;
+}
+
+.dock-btn:hover {
+  transform: translateY(-6px) scale(1.06);
+  filter: drop-shadow(0 10px 16px oklch(0.2 0.05 250 / 0.55))
+    drop-shadow(0 0 10px color-mix(in oklab, var(--gold) 60%, transparent));
+}
+
+.dock-btn:active {
+  transform: translateY(-1px) scale(0.96);
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cloud,
+  .sparkle,
+  .sea-shimmer,
+  .sea-glow,
+  .sun-rays,
+  .dock-btn {
+    animation: none;
+  }
+}
+
