@@ -27,6 +27,7 @@ export function playSfx(key: Extract<Key, "click" | "hover">, volume = 0.6) {
   if (typeof window === "undefined" || muted) return;
   const list = pool(key);
   const a = list.find((x) => x.paused || x.ended) ?? list[0];
+  if (!a) return;
   a.currentTime = 0;
   a.volume = volume;
   void a.play().catch(() => {});
