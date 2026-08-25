@@ -386,3 +386,84 @@
   }
 }
 
+
+/* ── Cloud pointer parallax + hover glow ─────────────────── */
+.cloud-field {
+  --px: 0;
+  --py: 0;
+  transform: translate3d(calc(var(--px) * 26px), calc(var(--py) * 14px), 0);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cloud {
+  pointer-events: auto;
+  transition:
+    filter 300ms ease,
+    opacity 300ms ease;
+}
+
+.cloud:hover {
+  filter: blur(4px) brightness(1.25)
+    drop-shadow(0 0 24px oklch(1 0 0 / 0.75));
+  opacity: 1;
+}
+
+/* ── Layered sea waves (depth / parallax) ────────────────── */
+.wave {
+  mix-blend-mode: screen;
+  will-change: background-position;
+}
+
+.wave-far {
+  background: repeating-linear-gradient(
+    96deg,
+    color-mix(in oklab, var(--sea-light) 30%, transparent) 0px,
+    transparent 2px,
+    transparent 18px
+  );
+  mask-image: radial-gradient(120% 55% at 62% 60%, #000 20%, transparent 70%);
+  opacity: 0.22;
+  animation: wave-scroll 26s linear infinite;
+}
+
+.wave-mid {
+  background: repeating-linear-gradient(
+    102deg,
+    color-mix(in oklab, var(--sea-light) 45%, transparent) 0px,
+    transparent 3px,
+    transparent 30px
+  );
+  mask-image: radial-gradient(120% 60% at 60% 72%, #000 25%, transparent 74%);
+  opacity: 0.3;
+  animation: wave-scroll 15s linear infinite reverse;
+}
+
+.wave-near {
+  background: repeating-linear-gradient(
+    88deg,
+    oklch(1 0 0 / 0.5) 0px,
+    transparent 4px,
+    transparent 48px
+  );
+  mask-image: radial-gradient(110% 45% at 58% 86%, #000 15%, transparent 68%);
+  opacity: 0.28;
+  animation: wave-scroll 8s linear infinite;
+}
+
+@keyframes wave-scroll {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 320px 60px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave {
+    animation: none;
+  }
+  .cloud-field {
+    transform: none;
+  }
+}
