@@ -194,6 +194,7 @@ function Index() {
         </ul>
       </nav>
 
+      {intro && <IntroLoader onDone={finishIntro} />}
     </main>
   );
 }
