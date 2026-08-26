@@ -44,6 +44,18 @@ function Index() {
   const skyRef = useRef<HTMLDivElement>(null);
   const [sound, setSound] = useState(true);
   const [intro, setIntro] = useState(true);
+  const [themeId, setThemeId] = useState(defaultTheme.id);
+  const [shopOpen, setShopOpen] = useState(false);
+
+  const theme = getTheme(themeId);
+
+  useEffect(() => setThemeId(loadThemeId()), []);
+
+  const selectTheme = (id: string) => {
+    setThemeId(id);
+    saveThemeId(id);
+    setShopOpen(false);
+  };
 
   const finishIntro = useCallback(() => setIntro(false), []);
 
@@ -78,26 +90,29 @@ function Index() {
     el.style.setProperty("--py", String(y));
   };
 
+  const seaMask = `radial-gradient(${theme.sea.w} ${theme.sea.h} at ${theme.sea.x} ${theme.sea.y}, #000 55%, transparent 100%), radial-gradient(${theme.hole.w} ${theme.hole.h} at ${theme.hole.x} ${theme.hole.y}, #000 45%, transparent 100%)`;
 
   return (
     <main
-      className="relative h-screen w-full overflow-hidden bg-sky"
+      className="relative h-[100svh] min-h-[100svh] w-full overflow-hidden bg-sky"
       onPointerMove={handlePointer}
     >
       {/* Island scene */}
       <img
-        src={island.url}
-        alt="خليج الجزيرة برماله الذهبية ومياهه الزرقاء"
-        className="absolute inset-0 h-full w-full object-cover"
+        key={theme.id}
+        src={theme.src}
+        alt={`خلفية ${theme.name}`}
+        className="absolute inset-0 h-full w-full object-cover object-center"
       />
 
       {/* Real water motion: the sea area of the artwork is warped by an
           animated turbulence displacement filter (no overlays on top) */}
       <img
-        src={island.url}
+        src={theme.src}
         alt=""
         aria-hidden="true"
-        className="water-layer absolute inset-0 h-full w-full object-cover"
+        className="water-layer absolute inset-0 h-full w-full object-cover object-center"
+        style={{ maskImage: seaMask, WebkitMaskImage: seaMask }}
       />
 
       <svg className="absolute h-0 w-0" aria-hidden="true" focusable="false">
@@ -119,12 +134,13 @@ function Index() {
           <feDisplacementMap
             in="SourceGraphic"
             in2="noise"
-            scale="14"
+            scale={theme.scale}
             xChannelSelector="R"
             yChannelSelector="G"
           />
         </filter>
       </svg>
+
 
       {/* Soft breathing water glow */}
       <div className="pointer-events-none absolute inset-0 sea-glow" />
