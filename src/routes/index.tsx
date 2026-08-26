@@ -3,32 +3,24 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Volume2, VolumeX } from "lucide-react";
 
 import { IntroLoader } from "@/components/IntroLoader";
+import { BackgroundShop } from "@/components/BackgroundShop";
 import { isMuted, playSfx, setMuted, startAmbient, stopAllSounds } from "@/lib/sound";
-
-
-import island from "@/assets/bay.webp.asset.json";
-import house from "@/assets/house.png.asset.json";
-import stats from "@/assets/stats.png.asset.json";
-import chest from "@/assets/chest.png.asset.json";
-import shop from "@/assets/shop.png.asset.json";
-import quest from "@/assets/quest.png.asset.json";
-import skull from "@/assets/skull.png.asset.json";
-import friends from "@/assets/friends.png.asset.json";
+import { defaultTheme, getTheme, loadThemeId, saveThemeId } from "@/lib/themes";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Island Bay — Animated Village Map" },
+      { title: "خليج الجزيرة — Island Bay" },
       {
         name: "description",
         content:
-          "A living island bay: drifting clouds, shimmering sea and a golden toolbar of village actions.",
+          "خليج حي: سحاب متحرك، بحر متموج، ومتجر خلفيات مجاني لتبديل عالم القرية.",
       },
-      { property: "og:title", content: "Island Bay — Animated Village Map" },
+      { property: "og:title", content: "خليج الجزيرة — Island Bay" },
       {
         property: "og:description",
         content:
-          "A living island bay: drifting clouds, shimmering sea and a golden toolbar of village actions.",
+          "خليج حي: سحاب متحرك، بحر متموج، ومتجر خلفيات مجاني لتبديل عالم القرية.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -38,14 +30,15 @@ export const Route = createFileRoute("/")({
 });
 
 const actions = [
-  { key: "house", src: house.url, label: "القرية" },
-  { key: "stats", src: stats.url, label: "الإحصائيات" },
-  { key: "chest", src: chest.url, label: "المخزن" },
-  { key: "shop", src: shop.url, label: "المتجر" },
-  { key: "quest", src: quest.url, label: "المهام" },
-  { key: "skull", src: skull.url, label: "المعركة" },
-  { key: "friends", src: friends.url, label: "الأصدقاء" },
+  { key: "house", src: "/img/house.png", label: "القرية" },
+  { key: "stats", src: "/img/stats.png", label: "الإحصائيات" },
+  { key: "chest", src: "/img/chest.png", label: "المخزن" },
+  { key: "shop", src: "/img/shop.png", label: "المتجر" },
+  { key: "quest", src: "/img/quest.png", label: "المهام" },
+  { key: "skull", src: "/img/skull.png", label: "المعركة" },
+  { key: "friends", src: "/img/friends.png", label: "الأصدقاء" },
 ];
+
 
 function Index() {
   const skyRef = useRef<HTMLDivElement>(null);
