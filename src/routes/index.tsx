@@ -207,7 +207,16 @@ function Index() {
         </ul>
       </nav>
 
+      {shopOpen && (
+        <BackgroundShop
+          activeId={themeId}
+          onSelect={selectTheme}
+          onClose={() => setShopOpen(false)}
+        />
+      )}
+
       {intro && <IntroLoader onDone={finishIntro} />}
+
     </main>
   );
 }
