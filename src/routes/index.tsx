@@ -194,7 +194,11 @@ function Index() {
                 className="dock-btn"
                 style={{ animationDelay: `${i * 0.25}s` }}
                 onPointerEnter={() => playSfx("hover", 0.35)}
-                onClick={() => playSfx("click", 0.75)}
+                onClick={() => {
+                  playSfx("click", 0.75);
+                  if (a.key === "shop") setShopOpen(true);
+                }}
+
               >
                 <img src={a.src} alt="" className="h-full w-full object-contain" />
               </button>
