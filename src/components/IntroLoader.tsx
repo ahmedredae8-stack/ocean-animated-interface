@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-import intro from "@/assets/intro.jpg.asset.json";
 import { playSfx } from "@/lib/sound";
 
 const TIPS = [
@@ -59,7 +58,7 @@ export function IntroLoader({ onDone }: { onDone: () => void }) {
       aria-label="جاري تحميل اللعبة"
     >
       <img
-        src={intro.url}
+        src="/img/intro.jpg"
         alt="طاقم القراصنة أمام سفينتهم عند الغروب"
         width={1088}
         height={1920}
