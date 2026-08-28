@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Volume2, VolumeX } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { MessageCircle, Volume2, VolumeX } from "lucide-react";
 
 import { IntroLoader } from "@/components/IntroLoader";
 import { BackgroundShop } from "@/components/BackgroundShop";
+import { usePlayer } from "@/hooks/usePlayer";
+import { saveThemeToAccount } from "@/lib/player";
 import { isMuted, playSfx, setMuted, startAmbient, stopAllSounds } from "@/lib/sound";
 import { defaultTheme, getTheme, loadThemeId, saveThemeId } from "@/lib/themes";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
