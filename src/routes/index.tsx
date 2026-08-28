@@ -188,15 +188,25 @@ function Index() {
         ))}
       </div>
 
-      {/* Sound toggle */}
-      <button
-        type="button"
-        onClick={toggleSound}
-        aria-label={sound ? "كتم الصوت" : "تشغيل الصوت"}
-        className="absolute right-3 top-3 z-10 rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
-      >
-        {sound ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-      </button>
+      {/* Top-right controls */}
+      <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
+        <Link
+          to="/chat"
+          aria-label="الدردشة"
+          onClick={() => playSfx("click", 0.6)}
+          className="rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </Link>
+        <button
+          type="button"
+          onClick={toggleSound}
+          aria-label={sound ? "كتم الصوت" : "تشغيل الصوت"}
+          className="rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
+        >
+          {sound ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+        </button>
+      </div>
 
       {/* Bottom toolbar */}
       <nav className="absolute inset-x-0 bottom-0 dock px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
@@ -212,9 +222,11 @@ function Index() {
                 onClick={() => {
                   playSfx("click", 0.75);
                   if (a.key === "shop") setShopOpen(true);
+                  else if (a.key === "friends") void navigate({ to: "/friends" });
                 }}
 
               >
+
                 <img src={a.src} alt="" className="h-full w-full object-contain" />
               </button>
             </li>
