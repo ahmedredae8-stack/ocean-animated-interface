@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as FriendsRouteImport } from './routes/friends'
+import { Route as VillageIdRouteImport } from './routes/village.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const FriendsRoute = FriendsRouteImport.update({
   path: '/friends',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VillageIdRoute = VillageIdRouteImport.update({
+  id: '/village/$id',
+  path: '/village/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/friends': typeof FriendsRoute
+  '/village/$id': typeof VillageIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/friends': typeof FriendsRoute
+  '/village/$id': typeof VillageIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
   '/friends': typeof FriendsRoute
+  '/village/$id': typeof VillageIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chat' | '/friends'
+  fullPaths: '/' | '/chat' | '/friends' | '/village/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chat' | '/friends'
-  id: '__root__' | '/' | '/chat' | '/friends'
+  to: '/' | '/chat' | '/friends' | '/village/$id'
+  id: '__root__' | '/' | '/chat' | '/friends' | '/village/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatRoute: typeof ChatRoute
   FriendsRoute: typeof FriendsRoute
+  VillageIdRoute: typeof VillageIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FriendsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/village/$id': {
+      id: '/village/$id'
+      path: '/village/$id'
+      fullPath: '/village/$id'
+      preLoaderRoute: typeof VillageIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRoute,
   FriendsRoute: FriendsRoute,
+  VillageIdRoute: VillageIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

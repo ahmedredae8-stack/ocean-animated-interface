@@ -658,3 +658,72 @@
     animation: none;
   }
 }
+
+/* ── Luxury background shop ──────────────────────────────── */
+.shop-panel {
+  background:
+    radial-gradient(120% 70% at 50% -10%, color-mix(in oklab, var(--gold) 14%, transparent), transparent 65%),
+    linear-gradient(160deg, oklch(0.22 0.05 250 / 0.96), oklch(0.14 0.04 255 / 0.98));
+  border: 1px solid color-mix(in oklab, var(--gold) 45%, transparent);
+  box-shadow:
+    0 30px 70px oklch(0 0 0 / 0.6),
+    inset 0 1px 0 color-mix(in oklab, var(--gold) 35%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.shop-card {
+  border: 1px solid oklch(1 0 0 / 0.12);
+  box-shadow: 0 10px 24px oklch(0 0 0 / 0.45);
+  transition:
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 260ms ease,
+    border-color 260ms ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in oklab, var(--gold) 65%, transparent);
+  box-shadow:
+    0 18px 34px oklch(0 0 0 / 0.55),
+    0 0 22px color-mix(in oklab, var(--gold) 35%, transparent);
+}
+
+.shop-card-active {
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--gold) 70%, transparent),
+    0 0 26px color-mix(in oklab, var(--gold) 45%, transparent);
+}
+
+.shop-sheen {
+  background: linear-gradient(115deg, transparent 40%, oklch(1 0 0 / 0.35) 50%, transparent 60%);
+  transform: translateX(-130%);
+  transition: transform 900ms ease;
+}
+
+.shop-card:hover .shop-sheen {
+  transform: translateX(130%);
+}
+
+.shop-card-in {
+  animation: shop-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes shop-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-card-in,
+  .shop-sheen {
+    animation: none;
+    transition: none;
+  }
+}

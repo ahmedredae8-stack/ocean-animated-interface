@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { Volume2, VolumeX } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { MessageCircle, Volume2, VolumeX } from "lucide-react";
 
 import { IntroLoader } from "@/components/IntroLoader";
 import { BackgroundShop } from "@/components/BackgroundShop";
+import { usePlayer } from "@/hooks/usePlayer";
+import { saveThemeToAccount } from "@/lib/player";
 import { isMuted, playSfx, setMuted, startAmbient, stopAllSounds } from "@/lib/sound";
 import { defaultTheme, getTheme, loadThemeId, saveThemeId } from "@/lib/themes";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -42,6 +45,8 @@ const actions = [
 
 function Index() {
   const skyRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { player } = usePlayer();
   const [sound, setSound] = useState(true);
   const [intro, setIntro] = useState(true);
   const [themeId, setThemeId] = useState(defaultTheme.id);
@@ -51,11 +56,21 @@ function Index() {
 
   useEffect(() => setThemeId(loadThemeId()), []);
 
+  // Prefer the background saved on the player's account.
+  useEffect(() => {
+    if (player?.theme_id) {
+      setThemeId(player.theme_id);
+      saveThemeId(player.theme_id);
+    }
+  }, [player?.theme_id]);
+
   const selectTheme = (id: string) => {
     setThemeId(id);
     saveThemeId(id);
+    if (player) void saveThemeToAccount(player.id, id);
     setShopOpen(false);
   };
+
 
   const finishIntro = useCallback(() => setIntro(false), []);
 
@@ -173,15 +188,25 @@ function Index() {
         ))}
       </div>
 
-      {/* Sound toggle */}
-      <button
-        type="button"
-        onClick={toggleSound}
-        aria-label={sound ? "كتم الصوت" : "تشغيل الصوت"}
-        className="absolute right-3 top-3 z-10 rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
-      >
-        {sound ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-      </button>
+      {/* Top-right controls */}
+      <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
+        <Link
+          to="/chat"
+          aria-label="الدردشة"
+          onClick={() => playSfx("click", 0.6)}
+          className="rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
+        >
+          <MessageCircle className="h-5 w-5" />
+        </Link>
+        <button
+          type="button"
+          onClick={toggleSound}
+          aria-label={sound ? "كتم الصوت" : "تشغيل الصوت"}
+          className="rounded-full border border-[color-mix(in_oklab,var(--gold)_55%,transparent)] bg-[var(--dock-bg)] p-2 text-white backdrop-blur transition hover:scale-110"
+        >
+          {sound ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+        </button>
+      </div>
 
       {/* Bottom toolbar */}
       <nav className="absolute inset-x-0 bottom-0 dock px-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
@@ -197,9 +222,11 @@ function Index() {
                 onClick={() => {
                   playSfx("click", 0.75);
                   if (a.key === "shop") setShopOpen(true);
+                  else if (a.key === "friends") void navigate({ to: "/friends" });
                 }}
 
               >
+
                 <img src={a.src} alt="" className="h-full w-full object-contain" />
               </button>
             </li>

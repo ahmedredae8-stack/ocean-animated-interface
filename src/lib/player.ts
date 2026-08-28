@@ -80,3 +80,8 @@ export function initials(name: string) {
 export function timeLabel(iso: string) {
   return new Date(iso).toLocaleTimeString("ar", { hour: "2-digit", minute: "2-digit" });
 }
+
+/** Persist the player's chosen background to their account. */
+export async function saveThemeToAccount(id: string, themeId: string) {
+  await supabase.from("players").update({ theme_id: themeId }).eq("id", id);
+}
