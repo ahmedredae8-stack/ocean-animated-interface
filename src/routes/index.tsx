@@ -45,6 +45,8 @@ const actions = [
 
 function Index() {
   const skyRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const { player } = usePlayer();
   const [sound, setSound] = useState(true);
   const [intro, setIntro] = useState(true);
   const [themeId, setThemeId] = useState(defaultTheme.id);
@@ -54,11 +56,21 @@ function Index() {
 
   useEffect(() => setThemeId(loadThemeId()), []);
 
+  // Prefer the background saved on the player's account.
+  useEffect(() => {
+    if (player?.theme_id) {
+      setThemeId(player.theme_id);
+      saveThemeId(player.theme_id);
+    }
+  }, [player?.theme_id]);
+
   const selectTheme = (id: string) => {
     setThemeId(id);
     saveThemeId(id);
+    if (player) void saveThemeToAccount(player.id, id);
     setShopOpen(false);
   };
+
 
   const finishIntro = useCallback(() => setIntro(false), []);
 
